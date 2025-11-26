@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给最爱的你 ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff4d6d;
+            transform: rotate(45deg);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .heart:before, .heart:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            position: absolute;
+        }
+        
+        .heart:before {
+            top: -10px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: -10px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(45deg); }
+            50% { transform: translateY(-20px) rotate(45deg); }
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #ff4d6d;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            min-height: 200px;
+        }
+        
+        .typing {
+            border-right: 2px solid #ff4d6d;
+            animation: blink 0.7s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { border-color: #ff4d6d; }
+            50% { border-color: transparent; }
+        }
+        
+        .flowers {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .flower {
+            font-size: 30px;
+            animation: sway 3s ease-in-out infinite;
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        .btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
+        }
+        
+        .music-control {
+            margin-top: 15px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 漂浮的爱心 -->
+        <div class="heart" style="top: 10%; left: 15%; animation-delay: 0s;"></div>
+        <div class="heart" style="top: 20%; right: 10%; animation-delay: 1s;"></div>
+        <div class="heart" style="bottom: 15%; left: 20%; animation-delay: 2s;"></div>
+        <div class="heart" style="bottom: 25%; right: 15%; animation-delay: 3s;"></div>
+        
+        <h1>❤️ 给我最爱的你 ❤️</h1>
+        
+        <div class="flowers">
+            <div class="flower" style="animation-delay: 0s;">🌹</div>
+            <div class="flower" style="animation-delay: 0.5s;">🌷</div>
+            <div class="flower" style="animation-delay: 1s;">🌸</div>
+            <div class="flower" style="animation-delay: 1.5s;">💐</div>
+        </div>
+        
+        <div class="message" id="message">
+            <!-- 消息将通过JavaScript动态生成 -->
+        </div>
+        
+        <button class="btn" id="replayBtn">再看一次祝福</button>
+        
+        <div class="music-control">
+            <span>背景音乐:</span>
+            <button class="btn" id="musicBtn" style="padding: 8px 15px; font-size: 14px;">播放</button>
+        </div>
+        
+        <footer>
+            <p>永远爱你的我 ❤️</p>
+        </footer>
+    </div>
+
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-happy-day-583.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageElement = document.getElementById('message');
+            const replayBtn = document.getElementById('replayBtn');
+            const musicBtn = document.getElementById('musicBtn');
+            const bgMusic = document.getElementById('bgMusic');
+            
+            // 祝福语内容
+            const messages = [
+                "亲爱的，刘悦泽小朋友，",
+                "遇见你是我这辈子最幸运的事。",
+                "你的笑容是我每天的动力，",
+                "你的温柔是我心灵的港湾。",
+                "和你在一起的每一刻，",
+                "都是我最珍贵的回忆。",
+                "愿我们的爱情如这春天的花朵，",
+                "永远绽放，永不凋零。",
+                "我爱你，不仅仅因为你是谁，",
+                "更因为在你面前我可以是谁。",
+                "愿未来的每一天，",
+                "我们都能携手同行，",
+                "一起看遍世间美景，",
+                "一起度过每一个平凡而珍贵的日子，",
+	"最后祝我的宝贝生日快乐！",
+                "永远爱你！ ❤️"
+            ];
+            
+            let isPlaying = false;
+            let musicStarted = false;
+            
+            // 打字机效果函数
+            function typeWriter(text, element, speed = 100, callback) {
+                let i = 0;
+                element.innerHTML = '';
+                
+                function typing() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(typing, speed);
+                    } else if (callback) {
+                        setTimeout(callback, 500);
+                    }
+                }
+                
+                typing();
+            }
+            
+            // 显示所有消息
+            function displayMessages(messageIndex = 0) {
+                if (messageIndex < messages.length) {
+                    typeWriter(messages[messageIndex], messageElement, 80, function() {
+                        messageElement.innerHTML += '<br><br>';
+                        displayMessages(messageIndex + 1);
+                    });
+                } else {
+                    messageElement.classList.remove('typing');
+                }
+            }
+            
+            // 开始显示消息
+            function startMessages() {
+                messageElement.innerHTML = '';
+                messageElement.classList.add('typing');
+                displayMessages();
+            }
+            
+            // 音乐控制
+            musicBtn.addEventListener('click', function() {
+                if (!musicStarted) {
+                    // 第一次播放需要用户交互
+                    bgMusic.play().then(() => {
+                        isPlaying = true;
+                        musicStarted = true;
+                        musicBtn.textContent = '暂停';
+                    }).catch(e => {
+                        console.log("自动播放被阻止，需要用户交互");
+                        alert("请点击页面任意位置后，再点击播放按钮");
+                    });
+                } else if (isPlaying) {
+                    bgMusic.pause();
+                    isPlaying = false;
+                    musicBtn.textContent = '播放';
+                } else {
+                    bgMusic.play();
+                    isPlaying = true;
+                    musicBtn.textContent = '暂停';
+                }
+            });
+            
+            // 重播按钮
+            replayBtn.addEventListener('click', startMessages);
+            
+            // 页面加载后开始显示消息
+            startMessages();
+            
+            // 添加更多漂浮的爱心
+            function createHearts() {
+                const container = document.querySelector('.container');
+                for (let i = 0; i < 5; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.style.left = Math.random() * 90 + '%';
+                    heart.style.top = Math.random() * 90 + '%';
+                    heart.style.animationDelay = Math.random() * 5 + 's';
+                    container.appendChild(heart);
+                }
+            }
+            
+            createHearts();
+        });
+    </script>
+</body>
+</html>
